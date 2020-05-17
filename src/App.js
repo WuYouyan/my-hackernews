@@ -54,10 +54,18 @@ class App extends Component {
     let lastNmae = "Zhao";
     const { searchTerm, list } = this.state;
     return (
-      <div className="App App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Search value={searchTerm} onChange={this.onSearchChange}>Search</Search>
-        <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
+      <div className="page">
+        <div className="interactions">
+          <Search 
+            value={searchTerm} 
+            onChange={this.onSearchChange}>
+              Search
+          </Search>
+        </div>
+        <Table 
+          list={list} 
+          pattern={searchTerm} 
+          onDismiss={this.onDismiss}/>
         
         <p>Hello {firstName} {lastNmae}, welcome to Hacknews</p>
       </div>
@@ -66,27 +74,41 @@ class App extends Component {
 }
 
 const Search = ({ value, onChange, children }) => 
-    <form>
-      {children}
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}/>
-    </form>
- 
+  <form>
+    {children}
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}/>
+  </form>
 
+const largeColumn = {
+  width: '40%',
+};
+
+const midColumn = {
+  width: '30%',
+};
+
+const smallColumn = {
+  width: '10%',
+};
 const Table = ({list, pattern, onDismiss}) => 
-  <div>
+  <div className="table">
     {list.filter(isSearched(pattern)).map(item =>
-      <div key={item.objectID}>
-        <span>
+      <div key={item.objectID} className="tavke-row">
+        <span style={largeColumn}>
           <a href={item.url}>{item.title}</a>{" "} 
         </span>
-        <span>{item.author} </span>
-        <span>{item.num_comments} </span>
-        <span>{item.points}</span>
-        <span>
-          <Button onClick={()=>onDismiss(item.objectID)}>dismiss</Button>
+        <span style={midColumn}>{item.author} </span>
+        <span style={smallColumn}>{item.num_comments} </span>
+        <span style={smallColumn}>{item.points}</span>
+        <span style={smallColumn}>
+          <Button 
+            className="button-inline" 
+            onClick={()=>onDismiss(item.objectID)}>
+              dismiss
+          </Button>
         </span>
       </div>  
     )}
