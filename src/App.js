@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import fetch from 'isomorphic-fetch';
 import './App.css';
 
 const DEFAULT_QUERY = 'redux';
@@ -158,7 +159,7 @@ const smallColumn = {
 const Table = ({list, onDismiss}) => 
   <div className="table">
     {list.map(item =>
-      <div key={item.objectID} className="tavke-row">
+      <div key={item.objectID} className="table-row">
         <span style={largeColumn}>
           <a href={item.url}>{item.title}</a>{" "} 
         </span>
@@ -185,3 +186,5 @@ const Button = ({ onClick, className='', children }) =>
   </button>
 
 export default App;
+
+export { Button, Table, Search };
