@@ -161,12 +161,12 @@ class App extends Component {
             onDismiss={this.onDismiss}/>
         }
         <div className="interactions">
-          <BurronWithConditionalRendering 
+          <ButtonWithConditionalRendering 
             isLoading={isLoading} 
             onClick={() => 
           this.fetchSearchTopStories(searchKey,  page + 1)}>
               More
-          </BurronWithConditionalRendering>
+          </ButtonWithConditionalRendering>
         </div>
       </div>
     );
@@ -409,7 +409,7 @@ const withConditionalRenderings = compose(
   withEither(isLoadingConditionFn, LoadingIndicator)
 );
 
-const BurronWithConditionalRendering = withConditionalRenderings(Button)
+const ButtonWithConditionalRendering = withConditionalRenderings(Button)
 
 export default App;
 
