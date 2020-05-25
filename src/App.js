@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import fetch from 'isomorphic-fetch';
 import './App.css';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+import 'font-awesome/css/font-awesome.min.css';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
@@ -265,7 +266,10 @@ Button.propTypes = {
 };
 
 const Loading = () =>
-  <div>Loading</div>
+( <div>
+    <i className="fa fa-spinner">loading</i>
+</div>
+)
 
 export default App;
 
