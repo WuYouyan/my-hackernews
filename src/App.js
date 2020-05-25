@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch';
 import './App.css';
 import PropTypes from 'prop-types';
 import 'font-awesome/css/font-awesome.min.css';
+import { compose } from 'recompose';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
@@ -138,10 +139,12 @@ class App extends Component {
             onDismiss={this.onDismiss}/>
         }
         <div className="interactions">
-          { isLoading? 
-            <Loading/>: 
-            <Button onClick={() => this.fetchSearchTopStories(searchKey,  page + 1)}>More</Button>
-          }
+          <BurronWithConditionalRendering 
+            isLoading={isLoading} 
+            onClick={() => 
+          this.fetchSearchTopStories(searchKey,  page + 1)}>
+              More
+          </BurronWithConditionalRendering>
         </div>
       </div>
     );
@@ -265,11 +268,46 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+
+
+/* Replaced by HOC Button
+// const withLoading = (Component) => (props) => 
+//   props.isLoading? <Loading/> : <Component {...props} />
+
 const Loading = () =>
-( <div>
+  (<div>
     <i className="fa fa-spinner">loading</i>
-</div>
-)
+  </div>)
+
+const withLoading = (Component) => ({ isLoading, ...rest }) => 
+  isLoading? <Loading/> : <Component {...rest} />
+
+const ButtonWithLoading = withLoading(Button); */
+
+// Reusable HOC Button
+//
+const withMaybe = (conditionalRenderingFn) => (Component) => (props) =>
+  conditionalRenderingFn(props)
+    ? null
+    : <Component { ...props } />
+
+const withEither = (conditionalRenderingFn, EitherComponent) => (Component) => (props) =>
+  conditionalRenderingFn(props)
+    ? <EitherComponent />
+    : <Component {...props} />
+
+const LoadingIndicator = () =>
+  <div>
+    <i className="fa fa-spinner">loading</i>
+  </div>
+
+const isLoadingConditionFn = (props) => props.isLoading;
+
+const withConditionalRenderings = compose(
+  withEither(isLoadingConditionFn, LoadingIndicator)
+);
+
+const BurronWithConditionalRendering = withConditionalRenderings(Button)
 
 export default App;
 
