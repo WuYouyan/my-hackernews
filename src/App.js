@@ -256,6 +256,7 @@ const Table = ({
           <Sort
             sortKey={'TITLE'}
             onSort={onSort}
+            isSortReverse={isSortReverse}
             activeSortKey={sortKey}
           >
             Title
@@ -265,6 +266,7 @@ const Table = ({
           <Sort
             sortKey={'AUTHOR'}
             onSort={onSort}
+            isSortReverse={isSortReverse}
             activeSortKey={sortKey}
           >
             Author
@@ -275,6 +277,7 @@ const Table = ({
             sortKey={'COMMENTS'}
             onSort={onSort}
             activeSortKey={sortKey}
+            isSortReverse={isSortReverse}
           >
             Comments
           </Sort>
@@ -283,6 +286,7 @@ const Table = ({
           <Sort
             sortKey={'POINTS'}
             onSort={onSort}
+            isSortReverse={isSortReverse}
             activeSortKey={sortKey}
           >
             Points
@@ -348,12 +352,14 @@ Button.propTypes = {
 
 const Sort = ({ 
   sortKey, 
+  isSortReverse,
   activeSortKey,
   onSort, 
   children }) => {
     const sortClass = classNames(
       'button-inline',
-      { 'button-active': sortKey === activeSortKey }
+      { 'button-active-up': sortKey === activeSortKey&&isSortReverse },
+      { 'button-active-down': sortKey === activeSortKey&&!isSortReverse }
     );
     return (
       <Button 

@@ -62,3 +62,12 @@
   border-radius: 0;
   border-bottom: 1px solid #38BB6C;
 }
+
+.button-active-up {
+  border-radius: 0;
+  border-top: 3px solid #38BB6C;
+}
+.button-active-down {
+  border-radius: 0;
+  border-bottom: 3px solid #38BB6C;
+}
