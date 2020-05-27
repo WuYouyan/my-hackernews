@@ -24,6 +24,41 @@ const SORTS = {
   POINTS: list => sortBy(list, 'points').reverse(),
 };
 
+const updateSearchTopStoriesState = (hits, page) =>
+  (prevState) => {
+    const { searchKey, results} = prevState;
+
+    const oldHits = results && results[searchKey]
+      ? results[searchKey].hits
+      : [];
+      const updatedHits = [
+        ...oldHits,
+        ...hits
+      ];
+      return {
+        results: {
+          ...results,
+          [searchKey]: { hits: updatedHits, page }
+        },
+        isLoading: false
+      };
+  }
+
+const updateResultsOnDismiss = (id) =>
+  (prevState) => {
+    const { searchKey, results } = prevState;
+    const { hits, page } = results[searchKey];
+    const isNotId = item => item.objectID !== id;
+    const updatedHits = hits.filter(isNotId);
+    return {
+      results:  { 
+        ...results, 
+        [searchKey]: { hits: updatedHits, page } 
+      }
+    }
+  }
+
+
 class App extends Component {
 
   constructor(props) {
@@ -51,18 +86,7 @@ class App extends Component {
 
   setSearchTopStories(result) {
     const { hits, page } = result;
-    const { searchKey, results } = this.state;
-
-    const oldHits = results && results[searchKey] ? results[searchKey].hits : [];
-    const updatedHits = [ ...oldHits, ...hits ];
-
-    this.setState({ 
-      results: { 
-        ...results,
-        [searchKey]: { hits: updatedHits, page }
-       },
-       isLoading: false 
-    });
+    this.setState(updateSearchTopStoriesState(hits, page));
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
@@ -77,6 +101,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    /* this.setState((prevState) =>{ 
+      const { searchTerm } = prevState;
+      this.fetchSearchTopStories(searchTerm);
+      return {
+        searchKey: searchTerm
+      }
+    }); */
     const { searchTerm } = this.state;
     this.setState({ 
       searchKey: searchTerm
@@ -85,18 +116,7 @@ class App extends Component {
   }
 
   onDismiss(id) {
-    const { searchKey, results } = this.state;
-    const { hits, page } = results[searchKey];
-
-    const isNotId = item => item.objectID !== id;
-    const updatedHits = hits.filter(isNotId);
-
-    this.setState({ 
-      results:  { 
-        ...results, 
-        [searchKey]: { hits: updatedHits, page } 
-      }  //ES6 replace Object.assign()
-    });
+    this.setState(updateResultsOnDismiss(id));
   }
 
   onSearchChange(event) {
